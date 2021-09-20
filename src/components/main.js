@@ -3,24 +3,53 @@ import {API_KEY, API_URL} from '../config';
 import { Preloader } from './preloader';
 import { GoodsList } from './goodsList';
 import {Cart} from './cart';
+import {BasketList} from './basketList';
 
 export const Main = () => {
     const [goods,setGoods] = useState([]);
     const [loading, setLoading] = useState(true);
     const [order,setOrder] = useState([]);
+    const [idBasketShow,setShowBasket] = useState(false);
+
+    const showBasket = () => {
+        setShowBasket(!idBasketShow);
+    }
     
-    useEffect(() => {
-        fetch(API_URL, {
-            method:'GET',
-            headers:{
-                'Authorization': API_KEY,
+    const removeFromBasket = (id) => {
+       const newOrder = order.filter(el => el.id !== id);
+       setOrder(newOrder);
+    }
+
+    const downQuantity = (id) => {
+        let newOrder = order.map((orderItem) => {
+            const newQuantity = orderItem.quantity - 1;
+            if (orderItem.id === id) {
+                return {
+                    ...orderItem,
+                    quantity: newQuantity >= 0 ? newQuantity : 0,
+                }
+            } else {
+                return orderItem;
+            }       
+        })
+        newOrder = newOrder.filter(el => el.quantity !== 0);
+        setOrder(newOrder);
+     }
+
+     const upQuantity = (id) => {
+        const newOrder = order.map((orderItem) => {
+            if (orderItem.id === id) {
+                return {
+                    ...orderItem,
+                    quantity: orderItem.quantity + 1
+                }
+            } else {
+                return orderItem;
             }
         })
-        .then(response => response.json())
-        .then(data => setGoods(data.shop))
-        setLoading(false);
-    },[])
-
+        setOrder(newOrder);
+     }
+    
     const pushInCart = (item) => {
         
         const itemIndex = order.findIndex((orderItem) => {
@@ -48,11 +77,23 @@ export const Main = () => {
         }      
     }
 
-    console.log(order);
+    useEffect(() => {
+        fetch(API_URL, {
+            method:'GET',
+            headers:{
+                'Authorization': API_KEY,
+            }
+        })
+        .then(response => response.json())
+        .then(data => setGoods(data.shop))
+        setLoading(false);
+    },[])
+    
 
     return (
         <main>
-            <Cart quantity={order.length}/>
+             {idBasketShow && <BasketList order={order} showBasket={showBasket} removeFromBasket={removeFromBasket} downQuantity={downQuantity} upQuantity={upQuantity} />}
+            <Cart quantity={order.length} showBasket={showBasket} />
             <div className="container2 content">
                 {loading ? <Preloader /> : <GoodsList goods={goods} pushInCart={pushInCart}/>}
             </div>

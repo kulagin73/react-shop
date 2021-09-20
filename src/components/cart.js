@@ -1,7 +1,7 @@
 export const Cart = (props) => {
-    const { quantity = 0} = props;
+    const { quantity = 0,showBasket = Function.prototype} = props;
     return (
-        <div className="cart">
+        <div className="cart" onClick={showBasket}>
             <div style={{position:'relative'}}>
                 <i className="material-icons">shopping_cart</i>
                 {
