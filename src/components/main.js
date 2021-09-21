@@ -4,12 +4,14 @@ import { Preloader } from './preloader';
 import { GoodsList } from './goodsList';
 import {Cart} from './cart';
 import {BasketList} from './basketList';
+import {Toast} from './toast';
 
 export const Main = () => {
     const [goods,setGoods] = useState([]);
     const [loading, setLoading] = useState(true);
     const [order,setOrder] = useState([]);
     const [idBasketShow,setShowBasket] = useState(false);
+    const [toast,setToast] = useState('');
 
     const showBasket = () => {
         setShowBasket(!idBasketShow);
@@ -74,7 +76,12 @@ export const Main = () => {
                }
            })
            setOrder(newOrder);
-        }      
+        }    
+        setToast(item.name); 
+    }
+
+    const closeToast = () => {
+        setToast('');
     }
 
     useEffect(() => {
@@ -91,9 +98,10 @@ export const Main = () => {
     
 
     return (
-        <main>
+        <main style={{margin:'30px 0'}}>
              {idBasketShow && <BasketList order={order} showBasket={showBasket} removeFromBasket={removeFromBasket} downQuantity={downQuantity} upQuantity={upQuantity} />}
             <Cart quantity={order.length} showBasket={showBasket} />
+            { toast && <Toast closeToast={closeToast} name={toast} />}
             <div className="container2 content">
                 {loading ? <Preloader /> : <GoodsList goods={goods} pushInCart={pushInCart}/>}
             </div>

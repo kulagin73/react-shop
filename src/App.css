@@ -126,6 +126,18 @@
   cursor: pointer;
 }
 
+.toast-container {
+  width: 12rem;
+  position: fixed;
+  top:2rem !important;
+  right: 7rem;
+  z-index: 7000;
+}
+
+.toast {
+  font-size: 12px !important;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
