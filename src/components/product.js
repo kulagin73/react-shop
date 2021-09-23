@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { ShopContext } from "../context";
+
 export const Product = (props) => {
     const {
         index, 
@@ -5,8 +8,10 @@ export const Product = (props) => {
         price,
         mainId,
         displayName,
-        pushInCart = Function.prototype
     } = props;
+
+    const {pushInCart} = useContext(ShopContext);
+    
     return (
         <div key={index} id={mainId} className="row">
             <div className="col s12">

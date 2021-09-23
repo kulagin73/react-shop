@@ -4,13 +4,16 @@ import 'materialize-css/dist/css/materialize.min.css';
 import {Header} from './components/header';
 import {Footer} from './components/footer';
 import { Main } from './components/main';
+import { ContextProvider } from './context';
 
 const App = () => {
 
 	return (
 	  <>
 	  <Header />
-	  <Main />
+	  <ContextProvider>
+	  	<Main />
+	  </ContextProvider>
 	  <Footer />
 	  </>
 	)

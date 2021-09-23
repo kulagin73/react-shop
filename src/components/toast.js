@@ -1,8 +1,9 @@
-import React,{useEffect} from "react";
+import React,{useEffect,useContext} from "react";
+import { ShopContext } from "../context";
 
-export const Toast = (props) => {
+export const Toast = () => {
    
-     const {name = '', closeToast = Function.prototype} = props;
+     const {toast = '',closeToast} = useContext(ShopContext);
 
      useEffect(() => {
          const timerId = setTimeout(closeToast,3000);
@@ -10,11 +11,11 @@ export const Toast = (props) => {
          return () => {
              clearTimeout(timerId);
          }
-     },[name])
+     },[toast])
 
     return (
        <div className="toast-container">
-           <span className="toast">{name} добавлен в корзину</span>
+           <span className="toast">{toast} добавлен в корзину</span>
        </div>
     )
 }
